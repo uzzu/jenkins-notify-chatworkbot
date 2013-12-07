@@ -1,0 +1,18 @@
+{
+  "api_token": "HogeHoge",
+  "jenkins_server_url": "http://localhost:8080/",
+  "notify_options": [
+    {
+      "jobs": ["my-job-unittest"],
+      "rooms": ["1111111"],
+      "policy": "build_fixed",
+      "message_prefix": "Test",
+    },
+    {
+      "jobs": ["my-job-deploy"],
+      "rooms": ["1111111"],
+      "policy": "build",
+      "message_prefix": "Deploy",
+    },
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "api_token": "HogeHoge",
+  "jenkins_server_url": "http://localhost:8080/",
+  "notify_options": [
+    {
+      "jobs": ["my-jobs1", "my-jobs2"],
+      "rooms": ["1234567, 1923456"],
+      "policy": "build",
+      "message_prefix": "Build",
+    },
+  ]
+}
