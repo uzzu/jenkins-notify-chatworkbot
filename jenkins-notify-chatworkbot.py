@@ -146,22 +146,6 @@ class JenkinsClient(object):
 ###                          classes for chatwork                            ###
 ################################################################################
 
-class ChatworkAccount(object):
-    u'''
-    chatworkアカウント情報
-    username: メールアドレス
-    password: パスワード
-    '''
-    def __init__(self, username, password):
-        u'''
-
-        :param username:
-        :param password:
-        :rtype : ChatworkAccount
-        '''
-        self.username = username
-        self.password = password
-
 class ChatworkApiToken(object):
     u'''
     '''
