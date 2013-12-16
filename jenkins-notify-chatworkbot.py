@@ -522,7 +522,7 @@ class JenkinsNotifyBot(object):
                 continue
 
             # detect build condition
-            is_new_build_success, is_new_build_failure, is_build_fixed = self._detect_build_condition(last_build_status[job_name], build_info.status)
+            is_new_build_success, is_new_build_failure, is_build_fixed = self._detect_build_condition(last_build_status[job_name].last_status, build_info.status)
             print job_name, 'new_build_success:' + str(is_new_build_success), 'build_fixed:' + str(is_build_fixed)
 
             # report for build
