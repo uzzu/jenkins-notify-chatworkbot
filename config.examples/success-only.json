@@ -5,7 +5,7 @@
     {
       "jobs": ["my-job1", "my-job2"],
       "rooms": ["1111111"],
-      "policy": "build_success",
-    },
+      "policy": "build_success"
+    }
   ]
 }

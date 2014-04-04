@@ -9,7 +9,7 @@ u'''
 
 # How to use
 * config.jsonを書きます
-    * config.json.template群を元に作成します
+    * config.examples以下のものを参考に作成します
 * ```python jenkins-notify-chatworkbot.py &```を実行します
 * 動きました。放置してください。お疲れ様です。
     * 初回起動時のみ全部通知しちゃいますが、許してください

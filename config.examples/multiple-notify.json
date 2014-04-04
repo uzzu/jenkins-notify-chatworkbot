@@ -6,13 +6,13 @@
       "jobs": ["my-job-unittest"],
       "rooms": ["1111111"],
       "policy": "build_fixed",
-      "message_prefix": "Test",
+      "message_prefix": "Test"
     },
     {
       "jobs": ["my-job-deploy"],
       "rooms": ["1111111"],
       "policy": "build",
-      "message_prefix": "Deploy",
-    },
+      "message_prefix": "Deploy"
+    }
   ]
 }
