@@ -6,7 +6,7 @@
       "jobs": ["my-jobs1", "my-jobs2"],
       "rooms": ["1234567, 1923456"],
       "policy": "build",
-      "message_prefix": "Build",
-    },
+      "message_prefix": "Build"
+    }
   ]
 }

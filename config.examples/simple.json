@@ -4,7 +4,7 @@
   "notify_options": [
     {
       "jobs": ["my-jobs"],
-      "rooms": ["1234567"],
-    },
+      "rooms": ["1234567"]
+    }
   ]
 }
