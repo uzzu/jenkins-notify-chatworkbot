@@ -500,12 +500,12 @@ class JenkinsNotifyBot(object):
             try:
                 self._process()
             except Exception:
-                print traceback.format_exc()
+                print '%s %s' % (datetime.datetime.today().strftime('%x %X'), traceback.format_exc())
             self._sleep()
             try:
                 self._update_config()
             except Exception:
-                print traceback.format_exc()
+                print '%s %s' % (datetime.datetime.today().strftime('%x %X'), traceback.format_exc())
 
     def _sleep(self):
         time.sleep(self._config.interval)
