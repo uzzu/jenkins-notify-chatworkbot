@@ -19,6 +19,7 @@ import os
 import random
 import re
 import time
+import traceback
 import urllib
 import urllib2
 import json
@@ -487,7 +488,10 @@ class JenkinsNotifyBot(object):
 
     def run(self):
         while True:
-            self._process()
+            try:
+                self._process()
+            except Exception:
+                print traceback.format_exc()
             time.sleep(self._config.interval)
 
     def _process(self):
