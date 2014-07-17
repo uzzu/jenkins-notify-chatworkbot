@@ -15,6 +15,8 @@ u'''
     * 初回起動時のみ全部通知しちゃいますが、許してください
 '''
 
+import datetime
+import hashlib
 import os
 import random
 import re
@@ -448,7 +450,8 @@ class JenkinsNotifyConfig(object):
     default_last_build_status_path = 'last_build_status.txt'
     default_interval = 120
     default_notify_options = []
-    def __init__(self, api_token, jenkins_server_url, last_build_status_path, interval, notify_options):
+    def __init__(self, checksum, api_token, jenkins_server_url, last_build_status_path, interval, notify_options):
+        self.checksum = checksum
         self.api_token = api_token
         self.jenkins_server_url = jenkins_server_url
         self.last_build_status_path = last_build_status_path
@@ -456,7 +459,7 @@ class JenkinsNotifyConfig(object):
         self.notify_options = notify_options
 
     @staticmethod
-    def from_file(path = 'config.json'):
+    def from_file(path):
         u'''
         configファイルからJenkinsNotifyConfigオブジェクトを生成して返却
         '''
@@ -465,6 +468,7 @@ class JenkinsNotifyConfig(object):
         if os.path.exists(path):
             with open(path, 'r') as f: lines = f.readlines()
         conf_text = "".join(lines)
+        checksum = hashlib.sha1(conf_text).hexdigest()
         conf_obj = json.loads(conf_text)
         api_token = ChatworkApiToken(conf_obj['api_token'])
         jenkins_server_url = conf_obj['jenkins_server_url']
@@ -474,25 +478,45 @@ class JenkinsNotifyConfig(object):
         options = []
         for option_json in options_json:
             options.append(JenkinsNotifyOption.from_json(option_json))
-        return JenkinsNotifyConfig(api_token, jenkins_server_url, last_build_status_path, interval, options)
+        return JenkinsNotifyConfig(checksum, api_token, jenkins_server_url, last_build_status_path, interval, options)
+
+    def is_same_config(self, that):
+        return self.checksum == that.checksum
 
 class JenkinsNotifyBot(object):
-    def __init__(self, config):
+    def __init__(self, config_file_path = 'config.json'):
         u'''
         :param config:
         :rtype : JenkinsNotifyBot
         '''
-        self._chatwork = ChatworkClient(config.api_token)
-        self._jenkins = JenkinsClient(config.jenkins_server_url)
-        self._config = config
+        self._config_file_path = config_file_path
+        self._chatwork = None
+        self._jenkins = None
+        self._config = None
 
     def run(self):
+        self._update_config()
         while True:
             try:
                 self._process()
             except Exception:
                 print traceback.format_exc()
-            time.sleep(self._config.interval)
+            self._sleep()
+            try:
+                self._update_config()
+            except Exception:
+                print traceback.format_exc()
+
+    def _sleep(self):
+        time.sleep(self._config.interval)
+
+    def _update_config(self):
+        new_config = JenkinsNotifyConfig.from_file(self._config_file_path)
+        if (self._config is not None) and self._config.is_same_config(new_config): return
+        self._config = new_config
+        self._chatwork = ChatworkClient(self._config.api_token)
+        self._jenkins = JenkinsClient(self._config.jenkins_server_url)
+        print '%s Configuration has been updated.' % (datetime.datetime.today().strftime('%x %X'))
 
     def _process(self):
         u'''
@@ -678,7 +702,7 @@ class JenkinsNotifyBot(object):
 ################################################################################
 
 def main():
-    JenkinsNotifyBot(JenkinsNotifyConfig.from_file()).run()
+    JenkinsNotifyBot().run()
 
 if __name__ == '__main__':
     main()
